@@ -73,6 +73,7 @@
 
     $("document").ready(function(){
         $(".status").click(function(){
+            $(".status").not(this).prop('checked',false);
             var $this = $(this);
             var id = $this.attr('data-id');
             var v_token = '{{ csrf_token() }}';
