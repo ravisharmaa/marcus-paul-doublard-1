@@ -10,12 +10,13 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Frontend\FrontendBaseController;
 use App\Model\Colourway;
 use App\Model\ProductDetail;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Requests\ContactRequest;
 use Illuminate\Support\Facades\Mail;
 use App\Model\Product;
-use Illuminate\Support\Facades\Session;
+
 
 
 class FrontendController extends FrontendBaseController
@@ -68,36 +69,29 @@ class FrontendController extends FrontendBaseController
         return view(parent::loadDefaultVars($this->view_path.'.contact-us'));
     }
 
-    public function sendMail(Request $request)
+    public function sendMail(ContactRequest $request)
     {
-        $code = $request->input('CaptchaCode1');
-        $isHuman = captcha_validate($code);
-        $isHuman=1;
-        if($isHuman){
-            $data = [
-                'fullname'   =>         $request->get('full_name'),
-                'email'      =>         $request->get('email'),
-                'message'    =>         $request->get('message'),
-            ];
 
-            Mail::send($this->mail.'.subscription',['data'=>$data], function ($message) use ($data){
-                $message->from('marcus@marcuspaul.com','Marcus Paul');
-                $message->to($data['email']);
-                $message->subject("FW: Marcus Paul Rugs: Enquiry Received");
-            });
-            return response()->json(json_encode([
-                'Success'=>'true'
-            ]));
-        } else {
-            return response()->json(json_encode([
-                'success'=>'false'
-            ]));
-        }
+        $data = [
+            'fullname'   =>         $request->get('full_name'),
+            'email'      =>         $request->get('email'),
+            'message'    =>         $request->get('message'),
+        ];
+
+        Mail::send($this->mail.'.subscription',['data'=>$data], function ($message) use ($data){
+            $message->from($data['email']);
+            $message->to('bipul@doublarddesign.com');
+            $message->subject("FW: Marcus Paul Rugs: Enquiry Received");
+        });
+
+        return redirect()->back()->with('message','Thank you for your enquiry');
+
 
     }
 
-    public function rugDetails($alias)
+    public function rugDetails($alias, $page=null)
     {
+
         $data = [];
         $data['product'] = Product::select('tbl_products.product_id','tbl_products.product_name',
             'tbl_products.product_alias',
@@ -121,9 +115,6 @@ class FrontendController extends FrontendBaseController
             ->where('tbl_colourways.colourway_default','=',1)
             ->first();
 
-
-
-
         $data['colourway'] = Colourway::select('tbl_colourways.colourway_id',
             'tbl_products.product_id',
             'tbl_colourways.colourway_id',
@@ -137,7 +128,7 @@ class FrontendController extends FrontendBaseController
             ->where('tbl_colourways.colourway_status',1)
             ->where('tbl_products.product_alias','=',$alias)
             ->orderBy('tbl_colourways.colourway_order','asc')
-            ->get();
+            ->paginate(8);
 
         $nextPrevious = Product::find($data['product']->product_id);
         $order  = $nextPrevious->product_detail;
@@ -145,7 +136,15 @@ class FrontendController extends FrontendBaseController
         $data['previous']= ProductDetail::where('product_order','<',$order->product_order)->orderBy('product_order','desc')->first();
 
         $data['next'] = ProductDetail::where('product_order', '>', $order->product_order)->orderBy('product_order')->first();
-        return view(parent::loadDefaultVars($this->view_path.'.rug_details'), compact('data'));
+
+        if(!is_null($page)){
+            return response()->json(json_encode([
+                'success'=>'true',
+                'data'  => $data['colourway']
+            ]));
+        } else {
+            return view(parent::loadDefaultVars($this->view_path.'.rug_details'), compact('data'));
+        }
     }
 
     public function getColourwayData($id)
@@ -161,13 +160,13 @@ class FrontendController extends FrontendBaseController
     public function enquireForm($product_alias, $colourway_alias=null)
     {
         $data = Product::select('tbl_products.product_id',
-                                'tbl_products.product_image',
-                                'tbl_products.product_name',
-                                'tbl_products.product_alias',
-                                'tbl_colourways.product_id',
-                                'tbl_colourways.colourway_id',
-                                'tbl_colourways.colourway_name',
-                                'tbl_colourways.colourway_th_image')
+            'tbl_products.product_image',
+            'tbl_products.product_name',
+            'tbl_products.product_alias',
+            'tbl_colourways.product_id',
+            'tbl_colourways.colourway_id',
+            'tbl_colourways.colourway_name',
+            'tbl_colourways.colourway_th_image')
             ->leftJoin('tbl_colourways','tbl_colourways.product_id','=','tbl_products.product_id')
             ->where('tbl_products.product_alias','=',$product_alias)
             ->where('tbl_colourways.colourway_alias','=',!is_null($colourway_alias)?$colourway_alias:'')->first();
@@ -185,19 +184,16 @@ class FrontendController extends FrontendBaseController
         $colourway  = Colourway::findOrFail($request->get('colourway_id'));
 
         Mail::send($this->mail.'.testmail',['mail_data'=>$mail_data,'product_data'=> $colourway ], function ($message) use ($mail_data, $colourway){
-            $message->from('marcus@marcuspaul.com','Marcus Paul');
-            $message->to($mail_data['email']);
+            $message->from($mail_data['email']);
+            $message->to('bipul@doublarddesign.com','Bipul Adhikari');
             $message->subject("FW: Marcus Paul Rugs: Enquiry Received");
         });
         Mail::send($this->mail.'.admin_mail',['mail_data'=>$mail_data,'product_data'=>$colourway], function ($message) use ($mail_data,$colourway ){
             $message->from($mail_data['email']);
-            $message->to('ravi@doublarddesign.com','Ravi Sharma');
+            $message->to('bipul@doublarddesign.com','Bipul Adhikari');
             $message->subject("FW: Marcus Paul Rugs: Enquiry Details");
         });
         return redirect()->back()->with(['message'=>'Enquiry Has been Sent Successfully']);
     }
-
-
-
 
 }

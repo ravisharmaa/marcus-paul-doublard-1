@@ -1,4 +1,7 @@
 @extends($master)
+@section('title')
+<title>Marcus Paul Rugs | Home</title>
+@endsection
 @section('extra-css')
 @endsection
 @section('home-section')

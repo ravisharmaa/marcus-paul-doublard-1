@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 //use GuzzleHttp\Psr7\Request;
+use App\Library\Captcha;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
@@ -44,7 +45,9 @@ class LoginController extends Controller
 
     public function getLogin()
     {
-        return view('auth.new_login');
+        $captcha = new Captcha();
+        $cap = $captcha->make();
+        return view('auth.new_login')->with('cap', $cap);
     }
 
     public function username()

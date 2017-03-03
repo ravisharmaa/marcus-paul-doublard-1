@@ -197,7 +197,7 @@ return [
          * Custom Service Provider
          * */
         App\Providers\AppHelperServiceProvider::class,
-        LaravelCaptcha\Providers\LaravelCaptchaServiceProvider::class
+
     ],
 
     /*

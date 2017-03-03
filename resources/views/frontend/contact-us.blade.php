@@ -32,7 +32,7 @@
             <div class="mp-in-page">
                 <p>To send an enquiry, please complete the form below and click submit.</p>
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-6">
+                    <div id="contact_box" class="col-xs-12 col-sm-12 col-md-6">
                         <div class="form-body le-ri-padding">
                             {{Form ::open(['route'=> $base_route.'.send-mail','method'=>'POST','class'=>'form-horizontal'])}}
                                 @include('frontend.partials._forms._contactform', ['submitBtn'=>'Submit'])

@@ -59,9 +59,10 @@
                             <strong>{{Session::get('captcha')}}</strong>
                         </div>
                     @endif
+
                     <div class="label_login">Security Code:</div>
-                    {!! captcha_image_html('MyCaptcha') !!}
-                    <input type="text"  style="padding:2px 5px;border: 1px solid #ab9b94;" class="txtfield_input" "id="CaptchaCode" name="CaptchaCode">
+                    <img src="{{$cap}}">
+                    {{--<input type="text"  style="padding:2px 5px;border: 1px solid #ab9b94;" class="txtfield_input" id="CaptchaCode" name="CaptchaCode">--}}
                 </div>
                 <div class="btnfields"><input class="btnfield_input" type="submit" name="submitted" value="Login" style="border: 1px solid #ab9b94;" /> <a href="{{url('password/reset')}}" style="text-decoration:none;">Forgot Password?</a></div>
         </div>

@@ -1,6 +1,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8;"/>
-<title>@yield('title', 'Marcus Paul | Home')</title>
+@yield('title')
 <meta name="description" content="Description" CONTENT="Marcus Paul"/>
 <meta name="keywords" content="Marcus Paul"/>
 <meta name="robots" content="all"/>
