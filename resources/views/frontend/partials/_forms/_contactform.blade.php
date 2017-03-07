@@ -26,15 +26,15 @@
     </div>
 </div>
 
-<label id="danger_captcha" style="color:red;">&nbsp;</label>
-<div class="form-group">
-    <div class="col-xs-6 col-sm-4 col-md-5">
-        {!! captcha_image_html('CustomerCaptcha') !!}
-    </div>
-    <div class="col-xs-6 col-sm-8 col-md-7">
-        <input type="text"  style="padding:2px 5px;border: 1px solid #ab9b94;" class="form-control" id="CaptchaCode1" name="CaptchaCode1">
-    </div>
-</div>
+{{--<label id="danger_captcha" style="color:red;">&nbsp;</label>--}}
+{{--<div class="form-group">--}}
+    {{--<div class="col-xs-6 col-sm-4 col-md-5">--}}
+        {{--{!! captcha_image_html('CustomerCaptcha') !!}--}}
+    {{--</div>--}}
+    {{--<div class="col-xs-6 col-sm-8 col-md-7">--}}
+        {{--<input type="text"  style="padding:2px 5px;border: 1px solid #ab9b94;" class="form-control" id="CaptchaCode1" name="CaptchaCode1">--}}
+    {{--</div>--}}
+{{--</div>--}}
 <div class="form-group">
     <div class="col-md-12">
         {{Form::button($submitBtn,['id'=>'btn','class'=>'btn mp-btn-sub','type'=>'submit'])}}

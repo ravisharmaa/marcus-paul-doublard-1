@@ -59,10 +59,8 @@ class LoginController extends Controller
     {
 
         $this->validateLogin($request);
-        $code = $request->input('CaptchaCode');
-        $isHuman = captcha_validate($code);
-        if($isHuman){
-            $data= $request->only(['username','password']);
+
+        $data= $request->only(['username','password']);
             if(!Auth::attempt($data)){
                 return redirect()->back()
                     ->withInput($request->only($this->username()))
@@ -70,11 +68,6 @@ class LoginController extends Controller
             } else {
                 return redirect()->route('cms.dashboard');
         }
-    } else {
-            return redirect()->back()->with(['captcha'=>'Incorrect Captcha']);
-        }
-
-
     }
 
 

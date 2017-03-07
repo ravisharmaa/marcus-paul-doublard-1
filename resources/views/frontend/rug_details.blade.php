@@ -14,7 +14,7 @@
                         <div class="col-md-2 hidden-xs hidden-sm ">
                             <div class="aside left">
                                 <h4 class="mp-color">Colourway(s)</h4>
-                                <ul>
+                                <ul class="paginate">
                                     @foreach($data['colourway'] as $c)
                                         <li>
                                             <a href="" class="colourway_data" data-id="{{ $c->colourway_id }}">
@@ -225,8 +225,6 @@
                             },
                             success:function (data) {
                                 var newData = jQuery.parseJSON(data);
-                                console.log(newData);
-                                console.log(newData.data[0].colourway_lg_image);
                                 if(newData.data[0].colourway_name){
                                     $(".colourway_name").html('<h3>'+ newData.data[0].colourway_name + '</h3>' );
                                     $(".image_data").attr('href',url +'images/colourway/lg/'+ newData.data[0].colourway_lg_image);
@@ -255,7 +253,7 @@
                             url    : '{{route($base_route.'.enquire.previous')}}',
                             data    : params,
                             error:function(request){
-                                console.log(request.responseText);
+                                //console.log(request.responseText);
                             },
 
                             success:function(data){
@@ -264,7 +262,8 @@
                         });
 
                     });
-                })
+                });
+
                 $(window).load(function() {
                     var height = Math.max($(".left").outerHeight(true), $(".right").outerHeight(true));
                     $(".left").outerHeight(height);
@@ -283,18 +282,29 @@
                 $("document").ready(function(){
                     $(".pagination a").click(function(e){
                         e.preventDefault();
-                        var page = $(this).attr('href').split('page=')[1];
-                        getData(page);
+                        var url = $(this).attr('href');
+//                        var page = $(this).attr('href').split('page=')[1];
+                        getData(url);
 
                     });
 
-                    function getData(page)
+                   /* function getData(page)
                     {
+                        console.log(page);
                         $.ajax({
-                            url: '{{url('rug-design-details/'.$data['product']->product_alias)}}'+'/'+page
+                            {{--url: '{{route($base_route.'.paginate',[$data['product']->product_alias])}}' +'/'+ page--}}
                         }).done(function(data){
-
+                            var rtnVal = jQuery.parseJSON(data);
+                            console.log(rtnVal);
                         });
+                    }*/
+
+                    function getData(url)
+                    {
+                       $.get(url, function(data) {
+                            var newData = jQuery.parseJSON(data);
+                            $(".paginate").html(newData.data);
+                       });
                     }
                 })
             </script>

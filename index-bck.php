@@ -19,7 +19,7 @@
 |
 */
 
-require __DIR__.'/../marcus-paul-doublard-1/bootstrap/autoload.php';
+require __DIR__.'/../marcus-paul-laravel/bootstrap/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +33,7 @@ require __DIR__.'/../marcus-paul-doublard-1/bootstrap/autoload.php';
 |
 */
 
-$app = require_once __DIR__.'/../marcus-paul-doublard-1/bootstrap/app.php';
+$app = require_once __DIR__.'/../marcus-paul-laravel/bootstrap/app.php';
 
 /*
 |--------------------------------------------------------------------------

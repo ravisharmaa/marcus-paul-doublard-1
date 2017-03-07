@@ -10,7 +10,6 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Frontend\FrontendBaseController;
 use App\Model\Colourway;
 use App\Model\ProductDetail;
-use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Requests\ContactRequest;
@@ -89,7 +88,7 @@ class FrontendController extends FrontendBaseController
 
     }
 
-    public function rugDetails($alias, $page=null)
+    public function rugDetails($alias, $page=null, Request $request)
     {
 
         $data = [];
@@ -130,6 +129,7 @@ class FrontendController extends FrontendBaseController
             ->orderBy('tbl_colourways.colourway_order','asc')
             ->paginate(8);
 
+
         $nextPrevious = Product::find($data['product']->product_id);
         $order  = $nextPrevious->product_detail;
 
@@ -137,12 +137,14 @@ class FrontendController extends FrontendBaseController
 
         $data['next'] = ProductDetail::where('product_order', '>', $order->product_order)->orderBy('product_order')->first();
 
-        if(!is_null($page)){
+        if($request->ajax()){
+            $data['html']= view(parent::loadDefaultVars($this->view_path.'.rug_details_ajax'), compact('data'))->render();
             return response()->json(json_encode([
                 'success'=>'true',
-                'data'  => $data['colourway']
+                'data'  =>  $data['html']
             ]));
-        } else {
+        }
+        else {
             return view(parent::loadDefaultVars($this->view_path.'.rug_details'), compact('data'));
         }
     }
@@ -195,5 +197,12 @@ class FrontendController extends FrontendBaseController
         });
         return redirect()->back()->with(['message'=>'Enquiry Has been Sent Successfully']);
     }
+
+    public function paginateData($page)
+    {
+        $data = Colourway::paginate(8);
+         view(parent::loadDefaultVars($this->view_path.'.rug_details'));
+    }
+
 
 }

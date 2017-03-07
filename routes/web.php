@@ -70,7 +70,8 @@ $this->post('send-mail',                                                        
 $this->post('send-form',                                                                ['as'=>'marcus-paul.send-form',                     'uses'=>        'Frontend\\FrontendController@sendForm']);
 $this->get('get-colourway-data/{id}',                                                   ['as'=>'marcus-paul.get-colourway-data',            'uses'=>        'Frontend\\FrontendController@getColourwayData']);
 $this->get('rug-designs/enquire/{product_alias?}/{colourway_alias?}',                   ['as'=>'marcus-paul.enquire',                       'uses'=>        'Frontend\\FrontendController@enquireForm']);
-$this->post('rug-designs/enquire-previous',                                         ['as'=>'marcus-paul.enquire.previous',              'uses'=>        'Frontend\\FrontendController@previous']);
+$this->post('rug-designs/enquire-previous',                                         ['as'=>'marcus-paul.enquire.previous',                  'uses'=>        'Frontend\\FrontendController@previous']);
+
 
 
 
